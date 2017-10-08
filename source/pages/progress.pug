@@ -1,0 +1,31 @@
+extends ../layout.pug
+
+block styles
+  style: include ../styles/progress.css
+
+block content
+  table.table.table-sm
+    thead.thead-inverse
+      tr
+        th Flag
+        th.text-center Reviews
+        th.text-center Time
+        th.text-right Due
+    tbody.
+      {{ range $k, $v := .Progress }}
+        {{ if le $v.Due 0 }}
+        <tr class="table-success">
+        {{ else }}
+        <tr>
+        {{ end }}
+          <td>
+            <img src="https://s3-ap-southeast-2.amazonaws.com/s3394330-flashcards/flags/mini/{{$v.Code}}.png" class="img-miniflag"/>
+          </td>
+          <td class='text-center'>{{$v.Reviews}}</td>
+          <td class='text-center'>{{$v.Time}}m</td>
+          {{ if le $v.Due 0 }}
+            <td class='text-right'><b>Now</b></td>
+          {{ else }}
+            <td class='text-right'>{{$v.Due}}m</td>
+          {{ end }}
+      {{ end }}

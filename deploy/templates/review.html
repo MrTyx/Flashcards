@@ -1,0 +1,120 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>Flashcards</title><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous"><link rel="shortcut icon" href="static/favicon.ico"><style>html, body {
+  height: 100%;
+}
+.container {
+	height:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#img-flag {
+  border: 1px solid black;
+  padding: 2px;
+}
+
+.hidden {
+  display: none;
+}
+</style></head><body><nav class="navbar navbar-expand-md navbar-dark bg-dark"><a class="navbar-brand" href="/">Vexillology</a><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav mr-auto"><li class="nav-item"><a class="nav-link" href="/study">Study</a></li><li class="nav-item"><a class="nav-link" href="/review">Review</a></li><li class="nav-item"><a class="nav-link" href="/progress">Progress</a></li><li class="nav-item"><a class="nav-link" href="/stats">Statistics</a></li><li class="nav-item"><a class="nav-link" href="/about">About</a></li></ul><span class="navbar-text" style="margin-right: 10px;">{{.Email}}</span><a class="btn btn-sm align-middle btn-outline-secondary" href="{{.LogoutURL}}" role="button">Logout</a></div></nav><div class="container"><div class="card text-center" style="width: 20rem;"><div class="alert hidden alert-danger" id="alert-error" role="alert"></div><img class="card-img-top" id="img-flag" src=".."><div class="card-body"><h4 class="card-title" id="h-text"></h4><table class="table table-sm hidden" id="table-results"><tbody></tbody></table><button class="hidden btn btn-success btn-block" id="btn-reveal">Reveal</button><div class="hidden btn-group" id="btn-answer" role="group"><button class="btn btn-dark" id="btn-repeat" type="button">Forgot</button><button class="btn btn-danger" id="btn-hard" type="button">Hard</button><button class="btn btn-success" id="btn-normal" type="button">Normal</button><button class="btn btn-primary" id="btn-easy" type="button">Easy</button></div><button class="hidden btn btn-success btn-block" id="btn-done">Finish</button><div class="progress text-center" style="margin-top: 10px;"><div class="hidden progress-bar" id="progress" role="progressbar" style="width: 0%;"></div></div></div></div></div><script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script><script>const UID = {{.ID}}
+const ORDER = {{.Order}}
+const BUCKET_URL = {{.BucketURL}}
+let data = []
+let index = 0;
+
+$(document).ready(() => {
+
+  function init() {
+    $('#h-text').html('Loading...')
+    $.getJSON(`due/${UID}`, json => {
+      if (json === null) {
+        $('#h-text').html('No cards to study!')
+        $('#img-flag').addClass('hidden');
+        $('#btn-done').removeClass('hidden')
+        return
+      }
+      data = json;
+      $('#h-text').html('What country is this?')
+      $('#img-flag').attr('src', getImageURL(data[index].Code));
+      $('#btn-reveal').removeClass('hidden')
+      $('#progress').removeClass('hidden')
+    })
+  }
+
+  function getImageURL(code) {
+    return `${BUCKET_URL}/flags/normal/${code}.png`
+  }
+
+  function getMiniImageURL(code) {
+    return `${BUCKET_URL}/flags/mini/${code}.png`
+  }
+
+  function reveal() {
+    $('#h-text').html(data[index].Name)
+    $('#btn-reveal').addClass('hidden')
+    $('#btn-answer').removeClass('hidden')
+    $('#progress').css('width', ((index+1) / data.length * 100) + "%")
+
+  }
+
+  function score(ratio, score) {
+    data[index].Score = score;
+    $.ajax({
+      url: `review/${data[index].Code}/${ratio}/${UID}`,
+      type: 'GET',
+      error: function(data) {
+        $('#alert-error').removeClass('hidden').html('<span>Uh oh, something went wrong.</span><br /><span>Are you online?</span>');
+        $('#img-flag').addClass('hidden');
+        $('#h-text').addClass('hidden');
+        $('#progress').addClass('hidden');
+        $('#btn-continue').addClass('hidden');
+        $('#btn-done').removeClass('hidden');
+      }
+    })
+    index++;
+    if (index == data.length) {
+      end();
+    } else {
+      next();
+    }
+  }
+
+  function next() {
+    $('#img-flag').attr('src', '');
+    $('#btn-answer').addClass('hidden')
+    $('#h-text').html('Loading...')
+    $('#img-flag').one("load", () => {
+      $('#h-text').html('What country is this?')
+      $('#btn-reveal').removeClass('hidden')
+    }).attr('src', getImageURL(data[index].Code))
+  }
+
+  function end() {
+    $('#h-text').html('Good job!')
+    $('#table-results').removeClass('hidden');
+    $('#img-flag').addClass('hidden')
+    $('#img-flag').attr('src', '')
+    $('#progress').addClass('hidden')
+    $('#btn-answer').addClass('hidden')
+    $('#btn-done').removeClass('hidden')
+
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].Score === 'Forgot' || data[i].Score === 'Hard') {
+        $('#table-results > tbody').append(`<tr>
+          <td class="text-left"><img src="${getMiniImageURL(data[i].Code)}" /></td>
+          <td class="text-left">${data[i].Name}</td>
+          <td class="text-right">${data[i].Score}</td>
+        </tr>`)
+      }
+    }
+  }
+
+  $('#btn-reveal').click(reveal)
+  $('#btn-repeat').click(() => { score(0.1, "Forgot"); })
+  $('#btn-hard').click(() => { score(0.75, "Hard"); })
+  $('#btn-normal').click(() => { score(1.25, "Normal"); })
+  $('#btn-easy').click(() => { score(2.5, "Easy"); })
+  $('#btn-done').click(() => { window.location.replace('http://s3394330-flashcards.appspot.com/'); })
+  init();
+})
+</script></body></html>

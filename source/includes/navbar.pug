@@ -1,0 +1,25 @@
+nav.navbar.navbar-expand-md.navbar-dark.bg-dark
+  a.navbar-brand(href="/") Vexillology
+  button.navbar-toggler(
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  )
+    span.navbar-toggler-icon
+  #navbarSupportedContent.collapse.navbar-collapse
+    ul.navbar-nav.mr-auto
+      li.nav-item
+        a.nav-link(href='/study') Study
+      li.nav-item
+        a.nav-link(href='/review') Review
+      li.nav-item
+        a.nav-link(href='/progress') Progress
+      li.nav-item
+        a.nav-link(href='/stats') Statistics
+      li.nav-item
+        a.nav-link(href='/about') About
+    span.navbar-text(style='margin-right: 10px;') {{.Email}}
+    a.btn.btn-sm.align-middle.btn-outline-secondary(href='{{.LogoutURL}}', role='button') Logout

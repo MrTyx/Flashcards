@@ -1,0 +1,24 @@
+{
+  "name": "s3394330-flashcards",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "pug source/pages --out deploy/templates --watch",
+    "deploy": "cd deploy && gcloud app deploy --version 1 && cd .."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/MrTyx/Flashcards.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrTyx/Flashcards/issues"
+  },
+  "homepage": "https://github.com/MrTyx/Flashcards#readme",
+  "dependencies": {
+    "pug": "^2.0.0-rc.4",
+    "pug-cli": "^1.0.0-alpha6"
+  }
+}

@@ -1,0 +1,39 @@
+extends ../layout.pug
+
+block content
+  .jumbotron.text-center(style='margin-top: 2rem;')
+    h1.display-3 Stats!
+    br
+    table.table.table-striped
+      thead.thead-inverse
+        tr
+          th Statistic
+          th.text-right Count
+      tbody
+        tr
+          td.text-left: strong Active Users
+          td.text-right {{ .Users }} Users
+        tr
+          td.text-left: strong Total Studied
+          td.text-right {{ .Studies }} Flags
+        tr
+          td.text-left: strong Average Studied
+          td.text-right {{ .SAverage }} per User
+        tr
+          td.text-left: strong Total Reviewed
+          td.text-right {{ .Reviews }} Flags
+        tr
+          td.text-left: strong Average Reviewed
+          td.text-right {{ .RAverage }} per User
+        tr
+          td.text-left: strong Hardest Flag
+          td.text-right.
+            {{ range $k, $v := .Hardest }}
+            <img src="https://s3-ap-southeast-2.amazonaws.com/s3394330-flashcards/flags/mini/{{ $v.Code }}.png" />
+            {{ end }}
+        tr
+          td.text-left: strong Easiest Flag
+          td.text-right.
+            {{ range $k, $v := .Easiest }}
+            <img src="https://s3-ap-southeast-2.amazonaws.com/s3394330-flashcards/flags/mini/{{ $v.Code }}.png" />
+            {{ end }}

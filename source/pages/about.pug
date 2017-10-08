@@ -1,0 +1,46 @@
+extends ../layout.pug
+
+block content
+  .jumbotron(style='margin-top: 2rem; padding-top: 1.5rem;')
+    h4 What is this?
+    p.text-justify
+      | This is a project for a course as part of my Masters of Computer Science. I needed to design a use case where users interact with data on Google Cloud using a web interface, and then to perform analytics on that data using an algorithm of my choice.
+    br
+    h4 How are review times calculated?
+    p.text-justify
+      | On the backend, review times are calculated using a #[a(href="https://en.wikipedia.org/wiki/Spaced_repetition") Spaced Repetition Algorithm]. A card must first be studied. It is then due for review in #[strong twelve hours]. As a flashcard is reviewed, the user scores themself. That score applies a multiplier to the due time. If a user scores Normal, the time between reviews will grow at a steady rate.
+    p.text-justify
+      | The minimum review time is #[strong two hours]. As you reach a stage where you can honestly score yourself Normal or Easy, the time will increase.
+    table.table.table-light.table-sm
+      thead.thead-inverse
+        tr
+          th Score
+          th.text-right Multiplier
+      tbody
+        tr
+          th(scope="row") Forgot
+          td.text-right 0.1 
+        tr
+          th(scope="row") Hard
+          td.text-right 0.75
+        tr
+          th(scope="row") Normal
+          td.text-right 1.25
+        tr
+          th(scope="row") Easy
+          td.text-right 2.5
+    p.text-justify
+      | #[strong Example:] Alice reviews a flashcard. The due time is 12 hours (#[em 43200 seconds]). When she reviews the flashcard she scores it as Hard. The flashcard is now due in 9 hours (#[em 43200 x 0.75 = 32400 seconds]). When she reviews the flashcard for a second time, she scores it as Normal. The flashcard is now due in 11.25 hours (#[em 32400 x 1.25 = 40500 seconds]).
+    br
+    
+    h4 How many cards should I study/review?
+    p.text-justify
+      | Ignore any advice if you get better results at a different pace. That said, this is my recommendation;
+    p.text-justify
+      | Twice daily, start every session by reviewing up to fifty cards.
+      | If you reviewed #[em less than fifty], then always study. But if you reviewed #[em fifty], then gauge if you feel up to some study.
+      | If you are studying, do one session of ten new cards.
+    p.text-justify
+      | There is a threshold where you get diminishing returns on any study or review. Most spaced repetition algorithms put this at 100 flashcards. I would recommend starting at 50 flashcards per session, two sessions per day.
+      
+      

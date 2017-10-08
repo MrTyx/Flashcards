@@ -1,0 +1,22 @@
+extends ../layout.pug
+
+block styles
+  style: include ../styles/study.css
+
+block content  
+  .card.text-center(style='width: 20rem;')
+    .alert.alert-danger.hidden#alert-error(role="alert")
+    img#img-flag.card-img-top(src='..')
+    .card-body
+      h4#h-text.card-title
+      table.table.table-sm#table-results.hidden
+        tbody
+      button.hidden#btn-reveal.btn.btn-success.btn-block Reveal
+      button.hidden#btn-continue.btn.btn-primary.btn-block(type='button') Continue
+      button.hidden#btn-done.btn.btn-success.btn-block Finish
+      .progress(style='margin-top: 10px;')
+        #progress.hidden.progress-bar(role='progressbar', style='width: 0%')
+
+block scripts
+  script
+    include ../scripts/study.js

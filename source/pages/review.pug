@@ -1,0 +1,26 @@
+extends ../layout.pug
+
+block styles
+  style: include ../styles/review.css
+    
+block content
+  .card.text-center(style='width: 20rem;')
+    .alert.hidden.alert-danger#alert-error(role="alert")
+    img#img-flag.card-img-top(src='..')
+    .card-body
+      h4#h-text.card-title
+      table.table.table-sm#table-results.hidden
+        tbody
+      button#btn-reveal.hidden.btn.btn-success.btn-block Reveal
+      #btn-answer.hidden.btn-group(role='group')
+        button#btn-repeat.btn.btn-dark(type='button') Forgot
+        button#btn-hard.btn.btn-danger(type='button') Hard
+        button#btn-normal.btn.btn-success(type='button') Normal
+        button#btn-easy.btn.btn-primary(type='button') Easy
+      button#btn-done.hidden.btn.btn-success.btn-block Finish
+      .progress.text-center(style='margin-top: 10px;')
+        #progress.hidden.progress-bar(role='progressbar', style='width: 0%')
+
+block scripts
+  script
+    include ../scripts/review.js

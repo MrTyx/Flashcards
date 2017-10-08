@@ -1,0 +1,17 @@
+extends ../layout.pug
+
+block content
+  .jumbotron.text-center(style='margin-top: 2rem;')
+    h1.display-3 Hello!
+    p.lead This is a flashcard app to test your knowledge of country flags.
+    p.lead Click Study button begin.
+    p(style="margin-bottom: 0;") You have studied #[strong {{.Order}}] out of 196 flashcards.
+    p(style="margin-bottom: 1.5rem;") You have #[strong {{.Due}}] flashcards up for review.
+
+    .container
+      .row.justify-content-center
+        .col-lg-2.col-md-12(style="margin-bottom: 5px;"): a.btn.btn-success.btn-block(href='/study', role='button') Study
+        .col-lg-2.col-md-12(style="margin-bottom: 5px;"): a.btn.btn-dark.btn-block(href='/review', role='button') Review
+        .col-lg-2.col-md-12(style="margin-bottom: 5px;"): a.btn.btn-dark.btn-block(href='/progress', role='button') Progress
+        .col-lg-2.col-md-12(style="margin-bottom: 5px;"): a.btn.btn-dark.btn-block(href='/stats', role='button') Stats
+        .col-lg-2.col-md-12(style="margin-bottom: 5px;"): a.btn.btn-dark.btn-block(href='/about', role='button') About
